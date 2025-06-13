@@ -16,45 +16,34 @@ from django.db.models import Q
 # from post.models import Post, Follow, Stream
 
 
-
-
 @login_required
 def index(request):
     user = request.user
-    user = request.user
-    all_users = User.objects.all()
-    follow_status = Follow.objects.filter(following=user, follower=request.user).exists()
+    all_users = User.objects.exclude(id=user.id)  # Exclude current user
+    profiles = Profile.objects.all()
 
-    profile = Profile.objects.all()
-
-    posts = Stream.objects.filter(user=user)
-    group_ids = []
-
+    # Get follow status for all users
+    followed_users = Follow.objects.filter(follower=user).values_list('following__id', flat=True)
     
-    for post in posts:
-        group_ids.append(post.post_id)
-        
+    posts = Stream.objects.filter(user=user)
+    group_ids = [post.post_id for post in posts]
     post_items = Post.objects.filter(id__in=group_ids).all().order_by('-posted')
 
     query = request.GET.get('q')
     if query:
         users = User.objects.filter(Q(username__icontains=query))
-
         paginator = Paginator(users, 6)
         page_number = request.GET.get('page')
         users_paginator = paginator.get_page(page_number)
 
-
     context = {
         'post_items': post_items,
-        'follow_status': follow_status,
-        'profile': profile,
+        'profiles': profiles,  # Changed from 'profile' to 'profiles'
         'all_users': all_users,
+        'followed_users': followed_users,  # Add this to context
         # 'users_paginator': users_paginator,
     }
     return render(request, 'index.html', context)
-
-
 @login_required
 def NewPost(request):
     user = request.user

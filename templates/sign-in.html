@@ -1,6 +1,6 @@
-{% extends 'base/second_base.html' %}
+{% extends 'base/main_base.html' %}
 {% load static %}
-{% block content %}
+{% block body %}
     <div class="login-wrapper">
         <!-- Main Wrapper -->
         <div class="login-wrapper columns is-gapless">
@@ -73,7 +73,7 @@
                             </div>
                             <div class="section forgot-password">
                                 <div class="has-text-centered">
-                                    <a href="#">Forgot password?</a>
+                                    <a href="{% url 'sign-up' %}">Forgot password?</a>
                                 </div>
                             </div>
                         </div>
