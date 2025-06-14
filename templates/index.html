@@ -4032,179 +4032,94 @@
                                 </div>
                             </div>
                         </div>
-<div class="card">
-  <div class="card-heading is-bordered">
-    <h4>Suggested Friends</h4>
-    <div class="dropdown is-spaced is-right" aria-haspopup="true" aria-controls="dropdown-menu">
-      <div class="dropdown-trigger">
-        <button class="button" aria-label="More options">
-          <span class="icon">
-            <i data-feather="more-vertical" aria-hidden="true"></i>
-          </span>
-        </button>
-      </div>
-      <div class="dropdown-menu" id="dropdown-menu" role="menu">
-        <div class="dropdown-content">
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <span class="icon">
-                <i data-feather="users" aria-hidden="true"></i>
-              </span>
-              <div class="media-content">
-                <h3>All Suggestions</h3>
-                <small>View all friend suggestions</small>
-              </div>
-            </div>
-          </a>
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <span class="icon">
-                <i data-feather="settings" aria-hidden="true"></i>
-              </span>
-              <div class="media-content">
-                <h3>Settings</h3>
-                <small>Access widget settings</small>
-              </div>
-            </div>
-          </a>
-          <hr class="dropdown-divider" aria-hidden="true">
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <span class="icon">
-                <i data-feather="trash-2" aria-hidden="true"></i>
-              </span>
-              <div class="media-content">
-                <h3>Remove</h3>
-                <small>Remove this widget from your feed</small>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card-body no-padding">
-    {% for user in all_users %}
-      {% if request.user.username != user.username %}
-        <div class="add-friend-block transition-block" id="user-{{ user.id }}" role="listitem">
-          <img src="{{ user.profile.image.url }}" alt="Profile picture of {{ user.username }}" loading="lazy">
-          <div class="page-meta">
-            {% if user.profile.first_name %}
-              <span class="user-name">{{ user.profile.first_name|title }} {{ user.profile.last_name|title }}</span>
-            {% else %}
-              <span class="user-name">{{ user.username }}</span>
-            {% endif %}
-            <span class="user-handle">@{{ user.username }}</span>
-          </div>
-          <div class="add-friend add-transition">
-            <a href="{% url 'follow' user.username user.id %}" 
-               class="follow-toggle {% if user.id in followed_users %}followed{% endif %}"
-               data-user-id="{{ user.id }}"
-               data-username="{{ user.username }}"
-               data-action="{% if user.id in followed_users %}unfollow{% else %}follow{% endif %}"
-               aria-label="{% if user.id in followed_users %}Unfollow {{ user.username }}{% else %}Follow {{ user.username }}{% endif %}">
-              <span class="icon">
-                {% if user.id in followed_users %}
-                  <i data-feather="check-circle" class="text-success" aria-hidden="true"></i>
-                {% else %}
-                  <i data-feather="user-plus" aria-hidden="true"></i>
-                {% endif %}
-              </span>
-            </a>
-          </div>
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script>
-  $(document).ready(function() {
-    // Initialize Feather Icons
-    feather.replace();
-
-    // CSRF token setup for AJAX
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.startsWith(name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
-    const csrftoken = getCookie('csrftoken');
-
-    // Follow/unfollow button handlers
-    $('.card-body').on('click', '.follow-toggle:not(.followed)', function(e) {
-      e.preventDefault();
-      const $button = $(this);
-      const userId = $button.data('user-id');
-      const username = $button.data('username');
-
-      $.ajax({
-        url: `/follow/${username}/1/`,
-        type: 'POST',
-        headers: {
-          'X-CSRFToken': csrftoken
-        },
-        data: {
-          user_id: userId
-        },
-        success: function(response) {
-          if (response.status === 'success') {
-            $button
-              .html('<span class="icon"><i data-feather="check-circle" class="text-success" aria-hidden="true"></i></span>')
-              .attr('aria-label', `Unfollow ${username}`)
-              .data('action', 'unfollow')
-              .addClass('followed');
-            feather.replace();
-          }
-        },
-        error: function(xhr, status, error) {
-          console.error('Follow error:', error);
-        }
-      });
-    });
-
-    $('.card-body').on('dblclick', '.follow-toggle.followed', function(e) {
-      e.preventDefault();
-      const $button = $(this);
-      const userId = $button.data('user-id');
-      const username = $button.data('username');
-
-      $.ajax({
-        url: `/follow/${username}/0/`,
-        type: 'POST',
-        headers: {
-          'X-CSRFToken': csrftoken
-        },
-        data: {
-          user_id: userId
-        },
-        success: function(response) {
-          if (response.status === 'success') {
-            $button
-              .html('<span class="icon"><i data-feather="user-plus" aria-hidden="true"></i></span>')
-              .attr('aria-label', `Follow ${username}`)
-              .data('action', 'follow')
-              .removeClass('followed');
-            feather.replace();
-          }
-        },
-        error: function(xhr, status, error) {
-          console.error('Unfollow error:', error);
-        }
-      });
-    });
-  });
-</script>
+                        <div class="card">
+                        <div class="card-heading is-bordered">
+                            <h4>Suggested Friends</h4>
+                            <div class="dropdown is-spaced is-right" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <div class="dropdown-trigger">
+                                <button class="button" aria-label="More options">
+                                <span class="icon">
+                                    <i data-feather="more-vertical" aria-hidden="true"></i>
+                                </span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-content">
+                                <a href="#" class="dropdown-item">
+                                    <div class="media">
+                                    <span class="icon">
+                                        <i data-feather="users" aria-hidden="true"></i>
+                                    </span>
+                                    <div class="media-content">
+                                        <h3>All Suggestions</h3>
+                                        <small>View all friend suggestions</small>
+                                    </div>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <div class="media">
+                                    <span class="icon">
+                                        <i data-feather="settings" aria-hidden="true"></i>
+                                    </span>
+                                    <div class="media-content">
+                                        <h3>Settings</h3>
+                                        <small>Access widget settings</small>
+                                    </div>
+                                    </div>
+                                </a>
+                                <hr class="dropdown-divider" aria-hidden="true">
+                                <a href="#" class="dropdown-item">
+                                    <div class="media">
+                                    <span class="icon">
+                                        <i data-feather="trash-2" aria-hidden="true"></i>
+                                    </span>
+                                    <div class="media-content">
+                                        <h3>Remove</h3>
+                                        <small>Remove this widget from your feed</small>
+                                    </div>
+                                    </div>
+                                </a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding">
+                            {% for user in all_users %}
+                            {% if request.user.username != user.username %}
+                                <div class="add-friend-block transition-block" id="user-{{ user.id }}" role="listitem">
+                                <a href="{% url 'profile' user %}">
+                                <img src="{{ user.profile.image.url }}" alt="Profile picture of {{ user.username }}" loading="lazy">
+                                </a>
+                                <a href="{% url 'profile' user %}">
+                                <div class="page-meta">
+                                    {% if user.profile.first_name %}
+                                    <span class="user-name">{{ user.profile.first_name|title }} {{ user.profile.last_name|title }}</span>
+                                    {% else %}
+                                    <span class="user-name">{{ user.username }}</span>
+                                    {% endif %}
+                                    <span class="user-handle">@{{ user.username }}</span>
+                                </div>
+                                <div class="add-friend add-transition">
+                                    <a href="#" 
+                                    class="follow-toggle {% if user.id in followed_users %}followed{% endif %}"
+                                    data-user-id="{{ user.id }}"
+                                    data-username="{{ user.username }}"
+                                    data-action="{% if user.id in followed_users %}unfollow{% else %}follow{% endif %}"
+                                    aria-label="{% if user.id in followed_users %}Unfollow {{ user.username }}{% else %}Follow {{ user.username }}{% endif %}">
+                                    <span class="icon">
+                                        {% if user.id in followed_users %}
+                                        <i data-feather="check-circle" class="text-success" aria-hidden="true"></i>
+                                        {% else %}
+                                        <i data-feather="user-plus" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </span>
+                                    </a>
+                                </div>
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        </div>
                         <!-- New job widget -->
                         <!-- /partials/widgets/new-job-widget.html -->
                         <div class="card is-new-job-card has-background-image" data-background="{% static 'assets/img/illustrations/cards/job-bg.svg' %}">
@@ -7182,5 +7097,79 @@
             </div>
         </div>
     </div>
+
+
+
+ <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+ {% comment %} start js follow froms index page  {% endcomment %}
+<script>
+                            $(document).ready(function() {
+                                // Initialize Feather Icons
+                                feather.replace();
+
+                                // CSRF token setup for AJAX
+                                function getCookie(name) {
+                                let cookieValue = null;
+                                if (document.cookie && document.cookie !== '') {
+                                    const cookies = document.cookie.split(';');
+                                    for (let i = 0; i < cookies.length; i++) {
+                                    const cookie = cookies[i].trim();
+                                    if (cookie.startsWith(name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                    }
+                                    }
+                                }
+                                return cookieValue;
+                                }
+                                const csrftoken = getCookie('csrftoken');
+
+                                // Toggle follow/unfollow on click
+                                $('.card-body').on('click', '.follow-toggle', function(e) {
+                                e.preventDefault();
+                                const $button = $(this);
+                                const userId = $button.data('user-id');
+                                const username = $button.data('username');
+                                const action = $button.data('action');
+                                const option = action === 'follow' ? 1 : 0;
+
+                                $.ajax({
+                                    url: `${username}/follow/${option}/`,
+                                    type: 'POST',
+                                    headers: {
+                                    'X-CSRFToken': csrftoken
+                                    },
+                                    data: {
+                                    user_id: userId
+                                    },
+                                    success: function(response) {
+                                    if (response.status === 'success') {
+                                        if (response.action === 'follow') {
+                                        $button
+                                            .html('<span class="icon"><i data-feather="check-circle" class="text-success" aria-hidden="true"></i></span>')
+                                            .attr('aria-label', `Unfollow ${username}`)
+                                            .data('action', 'unfollow')
+                                            .addClass('followed');
+                                        } else {
+                                        $button
+                                            .html('<span class="icon"><i data-feather="user-plus" aria-hidden="true"></i></span>')
+                                            .attr('aria-label', `Follow ${username}`)
+                                            .data('action', 'follow')
+                                            .removeClass('followed');
+                                        }
+                                        feather.replace();
+                                    } else {
+                                        alert(response.message || 'An error occurred');
+                                    }
+                                    },
+                                    error: function(xhr, status, error) {
+                                    console.error('AJAX error:', error);
+                                    alert('An error occurred while processing your request');
+                                    }
+                                });
+                                });
+                            });
+</script>
+{% comment %} end follow froms index page  {% endcomment %}
 
 {% endblock %} 
