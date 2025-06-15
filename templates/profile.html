@@ -56,22 +56,102 @@
                         </button>
                     {% endif %}
                         <br><br>
-                        {% if request.user.is_authenticated and request.user != profile.user %}
-                            {% if follow_status == True %}
-                                <a href="{% url 'follow' profile.user 0 %}" class="btn profile-edit-btn" style="color: red;">Unfollow</a> <br><br>
-                            {% else %}
-                                <a href="{% url 'follow' profile.user 1 %}" class="btn profile-edit-btn" style="color: green;">Follow</a> <br><br>
-                            {% endif %}
-                        {% endif %}
-
+                       {% if request.user.is_authenticated and request.user != profile.user %}
+    <a class="btn profile-edit-btn follow-toggle {% if follow_status %}followed{% endif %}"
+            data-user-id="{{ profile.user.id }}"
+            data-username="{{ profile.user.username }}"
+            data-action="{% if follow_status %}unfollow{% else %}follow{% endif %}"
+            style="{% if follow_status %}color: red;{% else %}color: green;{% endif %}">
+        {% if follow_status %}
+            <i class="fas fa-user-minus"></i> Unfollow
+        {% else %}
+            <i class="fas fa-user-plus"></i> Follow
+        {% endif %}
+                    </a>
+    <br><br>
+{% endif %}
                         {% if request.user.is_authenticated and request.user != profile.user %}
                                 <a href="{% url 'conversation' profile.user  %}" class="btn profile-edit-btn">Message</a> <br><br>
                         {% endif %}
                         <br>
 
                     
+                    <!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- iziToast -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+$(document).ready(function() {
+    // Follow/unfollow button handler
+    $('.follow-toggle').on('click', function(e) {
+        e.preventDefault();
+        const $button = $(this);
+        const userId = $button.data('user-id');
+        const username = $button.data('username');
+        const action = $button.data('action');
+        const option = action === 'follow' ? 1 : 0;
+
+        $.ajax({
+            url: `/${username}/follow/${option}/`,
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            data: {
+                'user_id': userId
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Update button state
+                    if (response.action === 'follow') {
+                        $button.html('<i class="fas fa-user-minus"></i> Unfollow')
+                               .data('action', 'unfollow')
+                               .css('color', 'red')
+                               .addClass('followed');
+                    } else {
+                        $button.html('<i class="fas fa-user-plus"></i> Follow')
+                               .data('action', 'follow')
+                               .css('color', 'green')
+                               .removeClass('followed');
+                    }
                     
+                    // Update followers count
+                    $.get(window.location.href, function(data) {
+                        const newFollowersCount = $(data).find('.profile-stat-count').eq(1).text();
+                        $('.profile-stat-count').eq(1).text(newFollowersCount);
+                    });
                     
+                    // Show notification
+                    const message = response.action === 'follow' 
+                        ? `You are now following ${username}` 
+                        : `You unfollowed ${username}`;
+                    
+                    iziToast.show({
+                        title: response.action === 'follow' ? 'Following' : 'Unfollowed',
+                        message: message,
+                        position: 'bottomRight',
+                        backgroundColor: '#343a40',
+                        theme: 'dark'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Action failed. Please try again.',
+                    position: 'bottomRight'
+                });
+            }
+        });
+    });
+});
+</script>
                     
 
                 </div>

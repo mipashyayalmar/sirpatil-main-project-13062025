@@ -27,9 +27,14 @@ SECRET_KEY = 'k1l8gsqp&&glb@%qafi26xb-y4%xjf60g)2!6bspqc+@xjl7me'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['instagram-clone-d.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['d37e-2406-9e00-111e-7695-2505-c5bc-9d46-de54.ngrok-free.app', '127.0.0.1']
 
-
+# ngrok 
+CSRF_TRUSTED_ORIGINS = [
+    'https://d37e-2406-9e00-111e-7695-2505-c5bc-9d46-de54.ngrok-free.app',
+    'https://*.ngrok-free.app',  # For all ngrok subdomains
+]
+# endngrok
 # Application definition
 
 INSTALLED_APPS = [
