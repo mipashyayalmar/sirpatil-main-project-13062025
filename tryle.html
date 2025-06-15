@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Feed</title>
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Material Design Icons -->
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+    <!-- Tailwind CSS for rapid styling -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .is-hidden {
+            display: none;
+        }
+        .comments-wrap {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+        .comment-textarea {
+            width: 100%;
+            resize: vertical;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+        }
+        .reply-form {
+            margin-left: 2.5rem;
+            margin-top: 0.5rem;
+        }
+        .post-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+        }
+        .like-button:hover .mdi-heart {
+            color: #ef4444;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .dropdown-trigger:hover .dropdown-menu {
+            display: block;
+        }
+        .small-fab {
+            background: #3b82f6;
+            color: #fff;
+            border-radius: 50%;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .small-fab:hover {
+            background: #2563eb;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        {% load static %}
+        {% for post in post_items %}
+        <!-- POST -->
+        <div id="feed-post-{{ post.id }}" class="card is-post bg-white">
+            <!-- Main wrap -->
+            <div class="content-wrap p-6">
+                <!-- Post header -->
+                <div class="card-heading flex items-center justify-between">
+                    <!-- User meta -->
+                    <div class="user-block flex items-center">
+                        <div class="image mr-3">
+                            {% if post.user.profile.image %}
+                            <img src="{{ post.user.profile.image.url }}" class="w-10 h-10 rounded-full" data-user-popover="{{ post.user.id }}" alt="" />
+                            {% else %}
+                            <img src="https://via.placeholder.com/40x40" class="w-10 h-10 rounded-full" alt="" />
+                            {% endif %}
+                        </div>
+                        <div class="user-info">
+                            <a href="{% url 'profile' post.user.username %}" class="font-semibold text-gray-900 hover:underline">
+                                {% if post.user.profile.first_name %}
+                                {{ post.user.profile.first_name|title }} {{ post.user.profile.last_name|title }}
+                                {% else %}
+                                {{ post.user.username }}
+                                {% endif %}
+                            </a>
+                            <span class="block text-sm text-gray-500">{{ post.posted|timesince }} ago</span>
+                        </div>
+                    </div>
+                    <!-- Right side dropdown -->
+                    <div class="dropdown is-spaced is-right is-neutral dropdown-trigger relative">
+                        <div>
+                            <div class="button p-2">
+                                <i data-feather="more-vertical" class="w-5 h-5 text-gray-600"></i>
+                            </div>
+                        </div>
+                        <div class="dropdown-menu z-10">
+                            <div class="dropdown-content p-2">
+                                <a href="#" class="dropdown-item flex items-center p-2 hover:bg-gray-100 rounded">
+                                    <i data-feather="bookmark" class="w-4 h-4 mr-2"></i>
+                                    <div class="media-content">
+                                        <h3 class="text-sm font-medium">Bookmark</h3>
+                                        <small class="text-xs text-gray-500">Add this post to your bookmarks.</small>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item flex items-center p-2 hover:bg-gray-100 rounded">
+                                    <i data-feather="bell" class="w-4 h-4 mr-2"></i>
+                                    <div class="media-content">
+                                        <h3 class="text-sm font-medium">Notify me</h3>
+                                        <small class="text-xs text-gray-500">Send me the updates.</small>
+                                    </div>
+                                </a>
+                                <hr class="dropdown-divider my-2 border-t border-gray-200" />
+                                <a href="#" class="dropdown-item flex items-center p-2 hover:bg-gray-100 rounded">
+                                    <i data-feather="flag" class="w-4 h-4 mr-2"></i>
+                                    <div class="media-content">
+                                        <h3 class="text-sm font-medium">Flag</h3>
+                                        <small class="text-xs text-gray-500">In case of inappropriate content.</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Post header -->
+
+                <!-- Post body -->
+                <div class="card-body mt-4">
+                    <!-- Post body text -->
+                    <div class="post-text mb-4">
+                        <p class="text-gray-700">
+                            {{ post.caption|safe }}
+                        </p>
+                    </div>
+                    <!-- Featured image -->
+                    <div class="post-image">
+                        <a href="{% url 'post-details' post.id %}">
+                            <img src="{{ post.picture.url }}" alt="" />
+                        </a>
+                        <!-- Action buttons -->
+                        <div class="flex items-center space-x-4 mt-4">
+                            <div class="like-wrapper">
+                                <a href="javascript:void(0);" class="like-button flex items-center" data-post-id="{{ post.id }}">
+                                    <i class="mdi mdi-heart not-liked bouncy text-gray-400 text-xl"></i>
+                                    <i class="mdi mdi-heart is-liked bouncy text-red-500 text-xl hidden"></i>
+                                    <span class="like-overlay"></span>
+                                </a>
+                            </div>
+                            <div class="fab-wrapper is-comment">
+                                <a href="javascript:void(0);" class="small-fab comment-toggle" data-post-id="{{ post.id }}">
+                                    <i data-feather="message-circle" class="w-5 h-5"></i>
+                                </a>
+                            </div>
+                            <div class="fab-wrapper is-share">
+                                <a href="javascript:void(0);" class="small-fab share-fab modal-trigger" data-modal="share-modal">
+                                    <i data-feather="link-2" class="w-5 h-5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Post body -->
+
+                <!-- Post footer -->
+                <div class="card-footer flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                    <!-- Followers avatars -->
+                    <div class="likers-group flex -space-x-2">
+                        {% for liker in post.likers|slice:":4" %}
+                        <img src="{{ liker.profile.image.url|default:'https://via.placeholder.com/32x32' }}" class="w-8 h-8 rounded-full border-2 border-white" data-user-popover="{{ liker.id }}" alt="" />
+                        {% endfor %}
+                    </div>
+                    <!-- Followers text -->
+                    <div class="likers-text flex-1 ml-4">
+                        <p class="text-sm text-gray-700">
+                            {% if post.likers.count > 2 %}
+                            <a href="#" class="font-medium">{{ post.likers.first.username }}</a> and {{ post.likers.count|add:-1 }} others liked this
+                            {% elif post.likers.count == 1 %}
+                            <a href="#" class="font-medium">{{ post.likers.first.username }}</a> liked this
+                            {% endif %}
+                        </p>
+                    </div>
+                    <!-- Post statistics -->
+                    <div class="social-count flex space-x-4">
+                        <div class="likes-count flex items-center">
+                            <i data-feather="heart" class="w-4 h-4 text-gray-500 mr-1"></i>
+                            <span class="text-sm text-gray-700">{{ post.likes.count }}</span>
+                        </div>
+                        <div class="comments-count flex items-center">
+                            <i data-feather="message-circle" class="w-4 h-4 text-gray-500 mr-1"></i>
+                            <span class="text-sm text-gray-700">{{ post.comments.count }}</span>
+                        </div>
+                        <div class="shares-count flex items-center">
+                            <i data-feather="link-2" class="w-4 h-4 text-gray-500 mr-1"></i>
+                            <span class="text-sm text-gray-700">{{ post.shares|default:0 }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Post footer -->
+            </div>
+            <!-- /Main wrap -->
+
+            <!-- Post Comments -->
+            <div class="comments-wrap is-hidden" id="comments-{{ post.id }}">
+                <!-- Header -->
+                <div class="comments-heading flex items-center justify-between p-4 border-b border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-900">Comments <small class="text-sm text-gray-500">({{ post.comments.count }})</small></h4>
+                    <div class="close-comments cursor-pointer">
+                        <i data-feather="x" class="w-6 h-6 text-gray-600"></i>
+                    </div>
+                </div>
+                <!-- /Header -->
+
+                <!-- Comments body -->
+                <div class="comments-body p-4 max-h-96 overflow-y-auto">
+                    {% for comment in post.comments.all|dictsortreversed:"date" %}
+                    <div class="media is-comment mb-4" id="comment-{{ comment.id }}">
+                        <!-- User image -->
+                        <div class="media-left mr-3">
+                            {% if comment.user.profile.image %}
+                            <img src="{{ comment.user.profile.image.url }}" class="w-10 h-10 rounded-full" data-user-popover="{{ comment.user.id }}" alt="" />
+                            {% else %}
+                            <img src="https://via.placeholder.com/40x40" class="w-10 h-10 rounded-full" alt="" />
+                            {% endif %}
+                        </div>
+                        <!-- Content -->
+                        <div class="media-content flex-1">
+                            <div class="bg-gray-100 p-3 rounded-lg">
+                                <a href="{% url 'profile' comment.user.username %}" class="font-semibold text-gray-900 hover:underline">{{ comment.user.username }}</a>
+                                <span class="block text-xs text-gray-500">{{ comment.date|timesince }} ago</span>
+                                <p class="mt-1 text-gray-700">{{ comment.body }}</p>
+                            </div>
+                            <!-- Actions -->
+                            <div class="controls flex items-center space-x-4 mt-2 text-sm">
+                                <div class="like-count flex items-center">
+                                    <i data-feather="thumbs-up" class="w-4 h-4 text-gray-500 mr-1"></i>
+                                    <span class="text-gray-700">{{ comment.likes.count }}</span>
+                                </div>
+                                <div class="reply">
+                                    <a href="javascript:void(0);" class="reply-toggle text-blue-600 hover:underline" data-comment-id="{{ comment.id }}">Reply</a>
+                                </div>
+                                {% if comment.user == user %}
+                                <div class="edit">
+                                    <a href="{% url 'edit-comment' comment.id %}" class="text-blue-600 hover:underline">Edit</a>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Reply Form (Hidden by Default) -->
+                            <div class="reply-form is-hidden mt-3" id="reply-form-{{ comment.id }}">
+                                <form method="POST" action="{% url 'post-details' post.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="parent" value="{{ comment.id }}" />
+                                    <div class="field">
+                                        <p class="control">
+                                            {{ form.body }}
+                                        </p>
+                                    </div>
+                                    <div class="actions mt-2">
+                                        <button type="submit" class="button is-solid bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Post Reply</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Nested Comments -->
+                            {% for reply in comment.replies.all|dictsortreversed:"date" %}
+                            <div class="media is-comment mt-4 ml-10">
+                                <div class="media-left mr-3">
+                                    {% if reply.user.profile.image %}
+                                    <img src="{{ reply.user.profile.image.url }}" class="w-8 h-8 rounded-full" data-user-popover="{{ reply.user.id }}" alt="" />
+                                    {% else %}
+                                    <img src="https://via.placeholder.com/32x32" class="w-8 h-8 rounded-full" alt="" />
+                                    {% endif %}
+                                </div>
+                                <div class="media-content flex-1">
+                                    <div class="bg-gray-100 p-3 rounded-lg">
+                                        <a href="{% url 'profile' reply.user.username %}" class="font-semibold text-gray-900 hover:underline">{{ reply.user.username }}</a>
+                                        <span class="block text-xs text-gray-500">{{ reply.date|timesince }} ago</span>
+                                        <p class="mt-1 text-gray-700">{{ reply.body }}</p>
+                                    </div>
+                                    <div class="controls flex items-center space-x-4 mt-2 text-sm">
+                                        <div class="like-count flex items-center">
+                                            <i data-feather="thumbs-up" class="w-4 h-4 text-gray-500 mr-1"></i>
+                                            <span class="text-gray-700">{{ reply.likes.count }}</span>
+                                        </div>
+                                        <div class="reply">
+                                            <a href="javascript:void(0);" class="reply-toggle text-blue-600 hover:underline" data-comment-id="{{ reply.id }}">Reply</a>
+                                        </div>
+                                    </div>
+                                    <!-- Reply Form for Nested Comment -->
+                                    <div class="reply-form is-hidden mt-3" id="reply-form-{{ reply.id }}">
+                                        <form method="POST" action="{% url 'post-details' post.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="parent" value="{{ reply.id }}" />
+                                            <div class="field">
+                                                <p class="control">
+                                                    {{ form.body }}
+                                                </p>
+                                            </div>
+                                            <div class="actions mt-2">
+                                                <button type="submit" class="button is-solid bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Post Reply</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="media-right">
+                                    <div class="dropdown is-spaced is-right is-neutral dropdown-trigger relative">
+                                        <div>
+                                            <div class="button p-2">
+                                                <i data-feather="more-vertical" class="w-5 h-5 text-gray-600"></i>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown-menu z-10">
+                                            <div class="dropdown-content p-2">
+                                                <a href="#" class="dropdown-item flex items-center p-2 hover:bg-gray-100 rounded">
+                                                    <i data-feather="x" class="w-4 h-4 mr-2"></i>
+                                                    <div class="media-content">
+                                                        <h3 class="text-sm font-medium">Hide</h3>
+                                                        <small class="text-xs text-gray-500">Hide this comment.</small>
+                                                    </div>
+                                                </a>
+                                                <div class="dropdown-divider my-2 border-t border-gray-200"></div>
+                                                <a href="#" class="dropdown-item flex items-center p-2 hover:bg-gray-100 rounded">
+                                                    <i data-feather="flag" class="w-4 h-4 mr-2"></i>
+                                                    <div class="media-content">
+                                                        <h3 class="text-sm font-medium">Report</h3>
+                                                        <small class="text-xs text-gray-500">Report this comment.</small>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="media-right">
+                            <div class="dropdown is-spaced is-right is-neutral dropdown-trigger relative">
+                                <div>
+                                    <div class="button p-2">
+                                        <i data-feather="more-vertical" class="w-5 h-5 text-gray-600"></i>
+                                    </div>
+                                </div>
+                                <div class="dropdown-menu z-10">
+                                    <div class="dropdown-content p-2">
+                                        <a href="#" class="dropdown-item flex items-center p-2 hover:bg-gray-100 rounded">
+                                            <i data-feather="x" class="w-4 h-4 mr-2"></i>
+                                            <div class="media-content">
+                                                <h3 class="text-sm font-medium">Hide</h3>
+                                                <small class="text-xs text-gray-500">Hide this comment.</small>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-divider my-2 border-t border-gray-200"></div>
+                                        <a href="#" class="dropdown-item flex items-center p-2 hover:bg-gray-100 rounded">
+                                            <i data-feather="flag" class="w-4 h-4 mr-2"></i>
+                                            <div class="media-content">
+                                                <h3 class="text-sm font-medium">Report</h3>
+                                                <small class="text-xs text-gray-500">Report this comment.</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500 text-center">No comments yet.</p>
+                    {% endfor %}
+                </div>
+                <!-- /Comments body -->
+
+                <!-- Comments footer -->
+                <div class="card-footer p-4 border-t border-gray-200">
+                    <div class="media post-comment has-emojis flex items-start">
+                        <div class="image mr-3">
+                            {% if user.profile.image %}
+                            <img src="{{ user.profile.image.url }}" class="w-10 h-10 rounded-full" data-user-popover="{{ user.id }}" alt="" />
+                            {% else %}
+                            <img src="https://via.placeholder.com/40x40" class="w-10 h-10 rounded-full" alt="" />
+                            {% endif %}
+                        </div>
+                        <div class="media-content flex-1">
+                            <form method="POST" action="{% url 'post-details' post.id %}">
+                                {% csrf_token %}
+                                <div class="field">
+                                    <p class="control">
+                                        {{ form.body }}
+                                    </p>
+                                </div>
+                                <div class="actions flex items-center space-x-2 mt-2">
+                                    <div class="action is-auto">
+                                        <i data-feather="at-sign" class="w-5 h-5 text-gray-600 cursor-pointer"></i>
+                                    </div>
+                                    <div class="action is-emoji">
+                                        <i data-feather="smile" class="w-5 h-5 text-gray-600 cursor-pointer"></i>
+                                    </div>
+                                    <div class="action is-upload relative">
+                                        <i data-feather="camera" class="w-5 h-5 text-gray-600 cursor-pointer"></i>
+                                        <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" />
+                                    </div>
+                                    <button type="submit" class="button is-solid bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Post Comment</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Comments footer -->
+            </div>
+            <!-- /Post Comments -->
+        </div>
+        <!-- /POST -->
+        {% empty %}
+        <p class="text-center text-gray-500">No posts available.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Toggle comment section
+            document.querySelectorAll('.comment-toggle').forEach(button => {
+                button.addEventListener('click', function () {
+                    const postId = this.getAttribute('data-post-id');
+                    const commentSection = document.getElementById(`comments-${postId}`);
+                    commentSection.classList.toggle('is-hidden');
+                });
+            });
+
+            // Close comment section
+            document.querySelectorAll('.close-comments').forEach(button => {
+                button.addEventListener('click', function () {
+                    const commentSection = this.closest('.comments-wrap');
+                    commentSection.classList.add('is-hidden');
+                });
+            });
+
+            // Toggle reply form
+            document.querySelectorAll('.reply-toggle').forEach(link => {
+                link.addEventListener('click', function () {
+                    const commentId = this.getAttribute('data-comment-id');
+                    const replyForm = document.getElementById(`reply-form-${commentId}`);
+                    replyForm.classList.toggle('is-hidden');
+                });
+            });
+
+            // Toggle like button
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const notLiked = this.querySelector('.not-liked');
+                    const isLiked = this.querySelector('.is-liked');
+                    notLiked.classList.toggle('hidden');
+                    isLiked.classList.toggle('hidden');
+                });
+            });
+
+            // Initialize Feather icons
+            feather.replace();
+        });
+    </script>
+</body>
+</html>
