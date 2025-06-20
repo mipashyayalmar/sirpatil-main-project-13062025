@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['d37e-2406-9e00-111e-7695-2505-c5bc-9d46-de54.ngrok-free.app', '127.0.0.1']
 
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_HTTPONLY = False
+
 # ngrok 
 CSRF_TRUSTED_ORIGINS = [
     'https://d37e-2406-9e00-111e-7695-2505-c5bc-9d46-de54.ngrok-free.app',
@@ -157,3 +160,27 @@ LOGOUT_REDIRECT_URL = 'sign-in'
 LOGIN_URL = 'sign-in'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# settings.py
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

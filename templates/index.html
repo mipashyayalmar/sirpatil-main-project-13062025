@@ -1,6 +1,9 @@
 {% extends 'base/second_base.html' %}
 {% block content %}
 {% load static %}
+<head>
+    <meta name="csrf-token" content="{% csrf_token %}">
+</head>
 <body>
     
     <div class="view-wrapper">
@@ -1074,416 +1077,478 @@
                                 </div>
                             </div>
                         </div>
-                        {% for post in post_items %}
-                        <!-- Post 1 -->
-                        <!-- /partials/pages/feed/posts/feed-post1.html -->
-                        <!-- POST #1 -->
-                        <div id="feed-post-1" class="card is-post">
-                          
-                            <!-- Main wrap -->
-                            <div class="content-wrap">
-                                <!-- Post header -->
-                                <div class="card-heading">
-                                    <!-- User meta -->
-                                    <div class="user-block">
-                                        <div class="image">
-                                             {% if post.user.profile.image %}
-                                            <div class="image">
-                                                <img src="{{post.user.profile.image.url}}" data-demo-src="{{post.user.profile.image.url}}" data-user-popover="1" alt="" />
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                        <div class="user-info">
-                                            <a href="{{post.user.username}}">
-                                                 {% if post.user.profile.first_name %}
-                                                 {{ post.user.profile.first_name|title }} {{ post.user.profile.last_name|title }} 
-                                                 {% else %}
-                                                 {{ post.user.username }}
-                                                 {% endif %}
-                                                </a>
-                                            <span class="time">{{post.posted}}</span>
-                                        </div>
-                                    </div>
-                                    <!-- Right side dropdown -->
-                                    <!-- /partials/pages/feed/dropdowns/feed-post-dropdown.html -->
-                                    <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
-                                        <div>
-                                            <div class="button">
-                                                <i data-feather="more-vertical"></i>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu" role="menu">
-                                            <div class="dropdown-content">
-                                                <a href="#" class="dropdown-item">
-                                                    <div class="media">
-                                                        <i data-feather="bookmark"></i>
-                                                        <div class="media-content">
-                                                            <h3>Bookmark</h3>
-                                                            <small>Add this post to your bookmarks.</small>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a class="dropdown-item">
-                                                    <div class="media">
-                                                        <i data-feather="bell"></i>
-                                                        <div class="media-content">
-                                                            <h3>Notify me</h3>
-                                                            <small>Send me the updates.</small>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <hr class="dropdown-divider" />
-                                                <a href="#" class="dropdown-item">
-                                                    <div class="media">
-                                                        <i data-feather="flag"></i>
-                                                        <div class="media-content">
-                                                            <h3>Flag</h3>
-                                                            <small>In case of inappropriate content.</small>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /Post header -->
-
-                                <!-- Post body -->
-                                <div class="card-body">
-                                    <!-- Post body text -->
-                                    <div class="post-text">
-                                        <p>
-                                            With caption
-                                            <a href="#"> {{post.caption}}</a>
-                                        </p>
-                                    </div>
-                                    <!-- Featured image -->
-                                    <div class="post-image">
-                                        <a data-fancybox="post1" data-lightbox-type="comments" data-thumb="{{ post.picture.url }}" href="{% url 'post-details' post.id %}" data-demo-href="{{ post.picture.url }}">
-                                            <img src="{{ post.picture.url }}" data-demo-src="{{ post.picture.url }}" alt="" />
-                                        </a>
-                                        <!-- Action buttons -->
-                                        <!-- /partials/pages/feed/buttons/feed-post-actions.html -->
-                                        <div class="like-wrapper">
-                                            <a href="javascript:void(0);" class="like-button">
-                                                <i class="mdi mdi-heart not-liked bouncy"></i>
-                                                <i class="mdi mdi-heart is-liked bouncy"></i>
-                                                <span class="like-overlay"></span>
-                                            </a>
-                                        </div>
-
-                                        <div class="fab-wrapper is-share">
-                                            <a href="javascript:void(0);" class="small-fab share-fab modal-trigger" data-modal="share-modal">
-                                                <i data-feather="link-2"></i>
-                                            </a>
-                                        </div>
-
-                                        <div class="fab-wrapper is-comment">
-                                            <a href="javascript:void(0);" class="small-fab">
-                                                <i data-feather="message-circle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /Post body -->
-
-                                <!-- Post footer -->
-                                <div class="card-footer">
-                                    <!-- Followers avatars -->
-                                    <div class="likers-group">
-                                        <img src="https://via.placeholder.com/300x300" data-demo-src="{% static 'assets/img/avatars/dan.jpg' %}" data-user-popover="1" alt="" />
-                                        <img src="https://via.placeholder.com/300x300" data-demo-src="{% static 'assets/img/avatars/david.jpg' %}" data-user-popover="4" alt="" />
-                                        <img src="https://via.placeholder.com/300x300" data-demo-src="{% static 'assets/img/avatars/edward.jpeg' %}" data-user-popover="5" alt="" />
-                                        <img src="https://via.placeholder.com/300x300" data-demo-src="{% static 'assets/img/avatars/milly.jpg' %}" data-user-popover="7" alt="" />
-                                    </div>
-                                    <!-- Followers text -->
-                                    <div class="likers-text">
-                                        <p>
-                                            <a href="#">Milly</a>,
-                                            <a href="#">David</a>
-                                        </p>
-                                        <p>and 23 more liked this</p>
-                                    </div>
-                                    <!-- Post statistics -->
-                                    <div class="social-count">
-                                        <div class="likes-count">
-                                            <i data-feather="heart"></i>
-                                            <span>{{post.likes}}</span>
-                                        </div>
-                                        <div class="shares-count">
-                                            <i data-feather="link-2"></i>
-                                            <span>9</span>
-                                        </div>
-                                        <div class="comments-count">
-                                            <i data-feather="message-circle"></i>
-                                            <span>3</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /Post footer -->
-                            </div>
-                            <!-- /Main wrap -->
-
-                            <!-- Post #1 Comments -->
-                            <div class="comments-wrap is-hidden">
-                                <!-- Header -->
-                                <div class="comments-heading">
-                                    <h4>Comments <small>(8)</small></h4>
-                                    <div class="close-comments">
-                                        <i data-feather="x"></i>
-                                    </div>
-                                </div>
-                                <!-- /Header -->
-
-                                <!-- Comments body -->
-                                <div class="comments-body has-slimscroll">
-                                    <!-- Comment -->
-                                    <div class="media is-comment">
-                                        <!-- User image -->
-                                        <div class="media-left">
-                                            {% if post.user.profile.image %}
-                                            <div class="image">
-                                                <img src="{{post.user.profile.image.url}}" data-demo-src="{{post.user.profile.image.url}}" data-user-popover="1" alt="" />
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                        <!-- Content -->
-                                        <div class="media-content">
-                                            <a href="#">Dan Walker</a>
-                                            <span class="time">28 minutes ago</span>
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempo incididunt ut labore et dolore magna aliqua. Ut enim
-                                                ad minim veniam, quis nostrud exercitation ullamco laboris
-                                                consequat.
-                                            </p>
-                                            <!-- Actions -->
-                                            <div class="controls">
-                                                <div class="like-count">
-                                                    <i data-feather="thumbs-up"></i>
-                                                    <span>4</span>
-                                                </div>
-                                                <div class="reply">
-                                                    <a href="#">Reply</a>
-                                                </div>
-                                                <div class="edit">
-                                                    <a href="#">Edit</a>
-                                                </div>
-                                            </div>
-
-                                            <!-- Nested Comment -->
-                                            <div class="media is-comment">
-                                                <!-- User image -->
-                                                <div class="media-left">
-                                                    <div class="image">
-                                                        <img src="https://via.placeholder.com/300x300" data-demo-src="{% static 'assets/img/avatars/david.jpg' %}" data-user-popover="4" alt="" />
-                                                    </div>
-                                                </div>
-                                                <!-- Content -->
-                                                <div class="media-content">
-                                                    <a href="#">David Kim</a>
-                                                    <span class="time">15 minutes ago</span>
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                        eiusmod tempo incididunt ut labore et dolore magna aliqua.
-                                                    </p>
-                                                    <!-- Actions -->
-                                                    <div class="controls">
-                                                        <div class="like-count">
-                                                            <i data-feather="thumbs-up"></i>
-                                                            <span>0</span>
-                                                        </div>
-                                                        <div class="reply">
-                                                            <a href="#">Reply</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Right side dropdown -->
-                                                <div class="media-right">
-                                                    <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
-                                                        <div>
-                                                            <div class="button">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="dropdown-menu" role="menu">
-                                                            <div class="dropdown-content">
-                                                                <a class="dropdown-item">
-                                                                    <div class="media">
-                                                                        <i data-feather="x"></i>
-                                                                        <div class="media-content">
-                                                                            <h3>Hide</h3>
-                                                                            <small>Hide this comment.</small>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                                <div class="dropdown-divider"></div>
-                                                                <a href="#" class="dropdown-item">
-                                                                    <div class="media">
-                                                                        <i data-feather="flag"></i>
-                                                                        <div class="media-content">
-                                                                            <h3>Report</h3>
-                                                                            <small>Report this comment.</small>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- /Nested Comment -->
-                                        </div>
-                                        <!-- Right side dropdown -->
-                                        <div class="media-right">
-                                            <!-- /partials/pages/feed/dropdowns/comment-dropdown.html -->
-                                            <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
-                                                <div>
-                                                    <div class="button">
-                                                        <i data-feather="more-vertical"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="dropdown-menu" role="menu">
-                                                    <div class="dropdown-content">
-                                                        <a class="dropdown-item">
-                                                            <div class="media">
-                                                                <i data-feather="x"></i>
-                                                                <div class="media-content">
-                                                                    <h3>Hide</h3>
-                                                                    <small>Hide this comment.</small>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a href="#" class="dropdown-item">
-                                                            <div class="media">
-                                                                <i data-feather="flag"></i>
-                                                                <div class="media-content">
-                                                                    <h3>Report</h3>
-                                                                    <small>Report this comment.</small>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Comment -->
-
-                                    <!-- Comment -->
-                                    <div class="media is-comment">
-                                        <!-- User image -->
-                                        <div class="media-left">
-                                            <div class="image">
-                                                <img src="https://via.placeholder.com/300x300" data-demo-src="{% static 'assets/img/avatars/rolf.jpg' %}" data-user-popover="13" alt="" />
-                                            </div>
-                                        </div>
-                                        <!-- Content -->
-                                        <div class="media-content">
-                                            <a href="#">Rolf Krupp</a>
-                                            <span class="time">9 hours ago</span>
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempo incididunt ut labore et dolore magna aliqua.
-                                                Exercitation ullamco laboris consequat.
-                                            </p>
-                                            <!-- Actions -->
-                                            <div class="controls">
-                                                <div class="like-count">
-                                                    <i data-feather="thumbs-up"></i>
-                                                    <span>2</span>
-                                                </div>
-                                                <div class="reply">
-                                                    <a href="#">Reply</a>
-                                                </div>
-                                            </div>
-
-                                            <!-- Nested Comment -->
-                                            <div class="media is-comment">
-                                                <!-- User image -->
-                                              
-                                            </div>
-                                            <!-- /Nested Comment -->
-
-                                        </div>
-                                        <!-- Right side dropdown -->
-                                        <div class="media-right">
-                                            <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
-                                                <div>
-                                                    <div class="button">
-                                                        <i data-feather="more-vertical"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="dropdown-menu" role="menu">
-                                                    <div class="dropdown-content">
-                                                        <a class="dropdown-item">
-                                                            <div class="media">
-                                                                <i data-feather="x"></i>
-                                                                <div class="media-content">
-                                                                    <h3>Hide</h3>
-                                                                    <small>Hide this comment.</small>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a href="#" class="dropdown-item">
-                                                            <div class="media">
-                                                                <i data-feather="flag"></i>
-                                                                <div class="media-content">
-                                                                    <h3>Report</h3>
-                                                                    <small>Report this comment.</small>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /Comments body -->
-
-                                <!-- Comments footer -->
-                                <div class="card-footer">
-                                    <div class="media post-comment has-emojis">
-                                        <!-- Comment Textarea -->
-                                        <div class="media-content">
-                                            <div class="field">
-                                                <p class="control">
-                                                    <textarea class="textarea comment-textarea" rows="5" placeholder="Write a comment..."></textarea>
-                                                </p>
-                                            </div>
-                                            <!-- Additional actions -->
-                                            <div class="actions">
-                                                <div class="image is-32x32">
-                                                    <img class="is-rounded" src="https://via.placeholder.com/300x300" data-demo-src="{% static 'assets/img/avatars/jenna.png' %}" data-user-popover="0" alt="" />
-                                                </div>
-                                                <div class="toolbar">
-                                                    <div class="action is-auto">
-                                                        <i data-feather="at-sign"></i>
-                                                    </div>
-                                                    <div class="action is-emoji">
-                                                        <i data-feather="smile"></i>
-                                                    </div>
-                                                    <div class="action is-upload">
-                                                        <i data-feather="camera"></i>
-                                                        <input type="file" />
-                                                    </div>
-                                                    <a class="button is-solid primary-button raised">Post Comment</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Comments footer -->
-                            </div>
-                            <!-- /Post #1 Comments -->
-                           
+                      <head>
+    <meta name="csrf-token" content="{% csrf_token %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emoji-mart/react"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emoji-mart/data"></script>
+    <script src="{% static 'js/lightbox.js' %}"></script>
+</head>
+<body>
+{% for post in post_items %}
+    <!-- POST -->
+    <div id="feed-post-{{ post.id }}" class="card is-post">
+        <!-- Main wrap -->
+        <div class="content-wrap">
+            <!-- Post header -->
+            <div class="card-heading">
+                <div class="user-block">
+                    <div class="image">
+                        {% if post.user.profile.image %}
+                            <img src="{{ post.user.profile.image.url }}" data-demo-src="{{ post.user.profile.image.url }}" data-user-popover="1" alt="" />
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <a href="{{ post.user.username }}">
+                            {% if post.user.profile.first_name %}
+                                {{ post.user.profile.first_name|title }} {{ post.user.profile.last_name|title }}
+                            {% else %}
+                                {{ post.user.username }}
+                            {% endif %}
+                        </a>
+                        <span class="time">{{ post.posted }}</span>
+                    </div>
+                </div>
+                <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
+                    <div>
+                        <div class="button">
+                            <i data-feather="more-vertical"></i>
                         </div>
-                        <!-- POST #1 -->
+                    </div>
+                    <div class="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <a href="#" class="dropdown-item">
+                                <div class="media">
+                                    <i data-feather="bookmark"></i>
+                                    <div class="media-content">
+                                        <h3>Bookmark</h3>
+                                        <small>Add this post to your bookmarks.</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item">
+                                <div class="media">
+                                    <i data-feather="bell"></i>
+                                    <div class="media-content">
+                                        <h3>Notify me</h3>
+                                        <small>Send me the updates.</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider" />
+                            <a href="#" class="dropdown-item">
+                                <div class="media">
+                                    <i data-feather="flag"></i>
+                                    <div class="media-content">
+                                        <h3>Flag</h3>
+                                        <small>In case of inappropriate content.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Post body -->
+            <div class="card-body">
+                <div class="post-text">
+                    <p>
+                        With caption
+                        <a href="#">{{ post.caption }}</a>
+                    </p>
+                </div>
+                <div class="post-image">
+                    <a data-fancybox="post{{ post.id }}" data-lightbox-type="comments" data-thumb="{{ post.picture.url }}" href="{% url 'post-details' post.id %}" data-demo-href="{{ post.picture.url }}">
+                        <img src="{{ post.picture.url }}" data-demo-src="{{ post.picture.url }}" alt="" />
+                    </a>
+                    <div class="like-wrapper">
+                        <a href="javascript:void(0);" class="like-button">
+                            <i class="mdi mdi-heart not-liked bouncy"></i>
+                            <i class="mdi mdi-heart is-liked bouncy"></i>
+                            <span class="like-overlay"></span>
+                        </a>
+                    </div>
+                    <div class="fab-wrapper is-share">
+                        <a href="javascript:void(0);" class="small-fab share-fab modal-trigger" data-modal="share-modal">
+                            <i data-feather="link-2"></i>
+                        </a>
+                    </div>
+                    <div class="fab-wrapper is-comment">
+                        <a href="javascript:void(0);" class="small-fab">
+                            <i data-feather="message-circle"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Post footer -->
+            <div class="card-footer">
+                <div class="likers-group">
+                    <img src="{% static 'assets/img/avatars/dan.jpg' %}" data-user-popover="1" alt="" />
+                    <img src="{% static 'assets/img/avatars/david.jpg' %}" data-user-popover="4" alt="" />
+                    <img src="{% static 'assets/img/avatars/edward.jpeg' %}" data-user-popover="5" alt="" />
+                    <img src="{% static 'assets/img/avatars/milly.jpg' %}" data-user-popover="7" alt="" />
+                </div>
+                <div class="likers-text">
+                    <p>
+                        <a href="#">Milly</a>,
+                        <a href="#">David</a>
+                    </p>
+                    <p>and 23 more liked this</p>
+                </div>
+                <div class="social-count">
+                    <div class="likes-count">
+                        <i data-feather="heart"></i>
+                        <span>{{ post.likes.count }}</span>
+                    </div>
+                    <div class="shares-count">
+                        <i data-feather="link-2"></i>
+                        <span>9</span>
+                    </div>
+                    <div class="comments-count">
+                        <i data-feather="message-circle"></i>
+                        <span>{{ post.comments.count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Post comments -->
+        <div class="comments-wrap is-hidden" id="comments-{{ post.id }}">
+            <div class="comments-heading">
+                <h4>Comments <small>({{ post.comments.count }})</small></h4>
+                <div class="close-comments" data-post="{{ post.id }}">
+                    <i data-feather="x"></i>
+                </div>
+            </div>
+            <div class="comments-body has-slimscroll">
+                {% for comment in post.comments.all %}
+                    {% if not comment.parent %}
+                        {% include 'comment.html' with comment=comment %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="card-footer">
+                <div class="media post-comment has-emojis">
+                    <div class="media-content">
+                        <form method="POST" action="{% url 'index' %}" class="comment-form" data-post-id="{{ post.id }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <div class="field">
+                                <p class="control">
+                                    <textarea class="textarea comment-textarea" name="body" rows="2" placeholder="Write a comment..." required id="comment-textarea-{{ post.id }}"></textarea>
+                                </p>
+                            </div>
+                            <div class="actions">
+                                <div class="image is-32x32">
+                                    {% if request.user.profile.image %}
+                                        <img class="is-rounded" src="{{ request.user.profile.image.url }}" data-user-popover="{{ request.user.id }}" alt="" />
+                                    {% else %}
+                                        <img class="is-rounded" src="{% static 'assets/img/avatars/placeholder.jpg' %}" alt="" />
+                                    {% endif %}
+                                </div>
+                                <div class="toolbar">
+                                    <div class="action is-auto">
+                                        <i data-feather="at-sign"></i>
+                                    </div>
+                                    <div class="action is-emoji" id="emoji-trigger-{{ post.id }}">
+                                        <i data-feather="smile"></i>
+                                    </div>
+                                    <div class="action is-upload">
+                                        <i data-feather="camera"></i>
+                                        <input type="file" />
+                                    </div>
+                                    <button type="submit" class="button is-solid primary-button raised">Post Comment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Post comments -->
+    </div>
+    <!-- /POST -->
+{% endfor %}
 
-                         {% endfor %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Feather icons
+    feather.replace();
+
+    // CSRF token for AJAX
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    // Function to generate comment HTML (mimics comment.html)
+    function generateCommentHtml(comment, postId) {
+        const profileImage = comment.user.profile_image ?
+            `<div class="image"><img src="${comment.user.profile_image}" alt="${comment.user.username}"></div>` :
+            '';
+        const username = comment.user.username || 'Unknown User';
+        const time = comment.date ? new Date(comment.date).toLocaleString() : 'Just now';
+        const body = comment.body || '';
+
+        let html = `
+            <div class="media is-comment" id="comment-${comment.id}">
+                <div class="media-left">
+                    ${profileImage}
+                </div>
+                <div class="media-content">
+                    <a href="#">${username}</a>
+                    <span class="time">${time}</span>
+                    <p>${body}</p>
+                    <div class="controls">
+                        <div class="like-count">
+                            <i data-feather="thumbs-up"></i>
+                            <span>0</span>
+                        </div>
+                        <div class="reply">
+                            <a href="#" class="reply-btn" data-comment-id="${comment.id}">Reply</a>
+                        </div>
+                    </div>
+                    <div class="reply-form" id="reply-form-${comment.id}" style="display: none;">
+                        <form method="POST" action="{% url 'index' %}" class="media post-comment reply-form-ajax" data-post-id="${postId}">
+                            <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                            <input type="hidden" name="post_id" value="${postId}">
+                            <input type="hidden" name="parent" value="${comment.id}">
+                            <div class="media-content">
+                                <div class="field">
+                                    <p class="control">
+                                        <textarea class="textarea" name="body" rows="2" placeholder="Write a reply..." required></textarea>
+                                    </p>
+                                </div>
+                                <button type="submit" class="button is-small is-primary">Post Reply</button>
+                            </div>
+                        </form>
+                    </div>
+        `;
+
+        // Add replies
+        if (comment.children && comment.children.length) {
+            comment.children.forEach(reply => {
+                html += `
+                    <div class="media is-comment" style="margin-left: 30px;">
+                        <div class="media-left">
+                            ${reply.user.profile_image ? `<div class="image"><img src="${reply.user.profile_image}" alt="${reply.user.username}"></div>` : ''}
+                        </div>
+                        <div class="media-content">
+                            <a href="#">${reply.user.username}</a>
+                            <span class="time">${reply.date ? new Date(reply.date).toLocaleString() : 'Just now'}</span>
+                            <p>${reply.body}</p>
+                            <div class="controls">
+                                <div class="like-count">
+                                    <i data-feather="thumbs-up"></i>
+                                    <span>0</span>
+                                </div>
+                                <div class="reply">
+                                    <a href="#" class="reply-btn" data-comment-id="${reply.id}">Reply</a>
+                                </div>
+                            </div>
+                            <div class="reply-form" id="reply-form-${reply.id}" style="display: none;">
+                                <form method="POST" action="{% url 'index' %}" class="media post-comment reply-form-ajax" data-post-id="${postId}">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                                    <input type="hidden" name="post_id" value="${postId}">
+                                    <input type="hidden" name="parent" value="${reply.id}">
+                                    <div class="media-content">
+                                        <div class="field">
+                                            <p class="control">
+                                                <textarea class="textarea" name="body" rows="2" placeholder="Write a reply..." required></textarea>
+                                            </p>
+                                        </div>
+                                        <button type="submit" class="button is-small is-primary">Post Reply</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        html += `</div>`;
+        return html;
+    }
+
+    // Handle comment form submissions (AJAX)
+    document.querySelectorAll('.comment-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const postId = this.getAttribute('data-post-id');
+            const formData = new FormData(this);
+
+            fetch('{% url 'index' %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    fetch(`/api/posts/${postId}/comments/`)
+                        .then(res => res.json())
+                        .then(comments => {
+                            const commentsBody = document.querySelector(`#comments-${postId} .comments-body`);
+                            commentsBody.innerHTML = '';
+                            comments.forEach(comment => {
+                                commentsBody.innerHTML += generateCommentHtml(comment, postId);
+                            });
+                            feather.replace();
+                            bindReplyButtons();
+                            this.querySelector('textarea').value = '';
+                            document.querySelector(`#comments-${postId} .comments-count span`).textContent = comments.length;
+                        })
+                        .catch(err => console.error('Error refreshing comments:', err));
+                } else {
+                    console.error('Comment submission failed:', data.error);
+                }
+            })
+            .catch(err => console.error('Error submitting comment:', err));
+        });
+    });
+
+    // Handle reply button clicks
+    function bindReplyButtons() {
+        document.querySelectorAll('.reply-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const commentId = this.getAttribute('data-comment-id');
+                const replyForm = document.getElementById(`reply-form-${commentId}`);
+                
+                document.querySelectorAll('.reply-form').forEach(form => {
+                    if (form.id !== `reply-form-${commentId}`) {
+                        form.style.display = 'none';
+                    }
+                });
+                
+                replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+                if (replyForm.style.display === 'block') {
+                    replyForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        });
+    }
+    bindReplyButtons();
+
+    // Handle reply form submissions (AJAX)
+    document.addEventListener('submit', function(e) {
+        if (e.target.classList.contains('reply-form-ajax')) {
+            e.preventDefault();
+            const postId = e.target.getAttribute('data-post-id');
+            const formData = new FormData(e.target);
+
+            fetch('{% url 'index' %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    fetch(`/api/posts/${postId}/comments/`)
+                        .then(res => res.json())
+                        .then(comments => {
+                            const commentsBody = document.querySelector(`#comments-${postId} .comments-body`);
+                            commentsBody.innerHTML = '';
+                            comments.forEach(comment => {
+                                commentsBody.innerHTML += generateCommentHtml(comment, postId);
+                            });
+                            feather.replace();
+                            bindReplyButtons();
+                            e.target.querySelector('textarea').value = '';
+                            e.target.style.display = 'none';
+                            document.querySelector(`#comments-${postId} .comments-count span`).textContent = comments.length;
+                        })
+                        .catch(err => console.error('Error refreshing comments:', err));
+                } else {
+                    console.error('Reply submission failed:', data.error);
+                }
+            })
+            .catch(err => console.error('Error submitting reply:', err));
+        }
+    });
+
+    // Initialize emoji picker
+    document.querySelectorAll('.comment-textarea').forEach(textarea => {
+        const postId = textarea.id.split('-')[2];
+        const emojiTrigger = document.getElementById(`emoji-trigger-${postId}`);
+        
+        emojiTrigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const picker = new EmojiMart.Picker({
+                data: EmojiMart.Data,
+                onEmojiSelect: (emoji) => {
+                    const cursorPos = textarea.selectionStart;
+                    const textBefore = textarea.value.substring(0, cursorPos);
+                    const textAfter = textarea.value.substring(cursorPos);
+                    
+                    textarea.value = textBefore + emoji.native + textAfter;
+                    const newCursorPos = cursorPos + emoji.native.length;
+                    textarea.setSelectionRange(newCursorPos, newCursorPos);
+                    textarea.focus();
+                },
+                dynamicWidth: true,
+                theme: 'light'
+            });
+            
+            const rect = emojiTrigger.getBoundingClientRect();
+            picker.style.position = 'absolute';
+            picker.style.top = `${rect.bottom + window.scrollY}px`;
+            picker.style.left = `${rect.left + window.scrollX}px`;
+            picker.style.zIndex = '1000';
+            
+            document.body.appendChild(picker);
+            
+            const removePicker = (e) => {
+                if (!picker.contains(e.target) && e.target !== emojiTrigger) {
+                    document.body.removeChild(picker);
+                    document.removeEventListener('click', removePicker);
+                }
+            };
+            
+            document.addEventListener('click', removePicker);
+        });
+    });
+
+    // Initialize dropdowns and lightbox emojis
+    function initDropdowns() { /* Initialize dropdowns */ }
+    function initLightboxEmojis() {
+        $('.emoji-button').on('click', function() {
+            const textarea = $(this).closest('.media-content').find('textarea');
+            const picker = new EmojiMart.Picker({
+                data: EmojiMart.Data,
+                onEmojiSelect: (emoji) => {
+                    const cursorPos = textarea[0].selectionStart;
+                    const textBefore = textarea.val().substring(0, cursorPos);
+                    const textAfter = textarea.val().substring(cursorPos);
+                    textarea.val(textBefore + emoji.native + textAfter);
+                    textarea.focus();
+                },
+                dynamicWidth: true,
+                theme: 'light'
+            });
+            const rect = $(this)[0].getBoundingClientRect();
+            picker.style.position = 'absolute';
+            picker.style.top = `${rect.bottom + window.scrollY}px`;
+            picker.style.left = `${rect.left + window.scrollX}px`;
+            picker.style.zIndex = '1000';
+            document.body.appendChild(picker);
+            $(document).on('click', function(e) {
+                if (!picker.contains(e.target) && e.target !== this) {
+                    document.body.removeChild(picker);
+                    $(document).off('click');
+                }
+            });
+        });
+    }
+});
+</script>
 
                         <!-- Post 2 -->
                         <!-- /partials/pages/feed/posts/feed-post2.html -->

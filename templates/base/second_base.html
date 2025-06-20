@@ -430,14 +430,21 @@
                     </div>
                     <div id="account-dropdown" class="navbar-item is-account drop-trigger has-caret">
                         <div class="user-image">
-                            <img src="https://via.placeholder.com/400x400" data-demo-src="{% static 'assets/img/avatars/jenna.png' %}" alt="" />
+                            {% if request.user.profile.image %}
+                                <img class="is-rounded" src="{{ request.user.profile.image.url }}" data-user-popover="{{ request.user.id }}" alt="" />
+                            {% else %} no img
+                            {% endif %}
                             <span class="indicator"></span>
                         </div>
 
                         <div class="nav-drop is-account-dropdown">
                             <div class="inner">
                                 <div class="nav-drop-header">
-                                    <span class="username">Jenna Davis</span>
+                                    {% if user.profile.first_name %}
+                                     <span class="username">{{ user.profile.first_name|title }} {{ user.profile.last_name|title }}</span>
+                                    {% else %}
+                                     <span class="username">{{ user.username }}</span>
+                                    {% endif %}
                                     <label class="theme-toggle">
                                         <input type="checkbox" />
                                         <span class="toggler">
@@ -455,11 +462,18 @@
                                         <div class="media">
                                             <div class="media-left">
                                                 <div class="image">
-                                                    <img src="https://via.placeholder.com/400x400" data-demo-src="{% static 'assets/img/avatars/jenna.png' %}" alt="" />
+                                                     {% if request.user.profile.image %}
+                                                        <img class="is-rounded" src="{{ request.user.profile.image.url }}" data-user-popover="{{ request.user.id }}" alt="" />
+                                                    {% else %} <img class="is-rounded" src="{{ request.user.profile.image.url }}" data-user-popover="{{ request.user.id }}" alt="" />
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="media-content">
-                                                <h3>Jenna Davis</h3>
+                                                {% if user.profile.first_name %}
+                                                <h3>{{ user.profile.first_name|title }} {{ user.profile.last_name|title }}</h3>
+                                                {% else %}
+                                                <h3>{{ user.username }}</h3>
+                                                {% endif %}
                                                 <small>Main account</small>
                                             </div>
                                             <div class="media-right">
@@ -905,8 +919,15 @@
             <!-- Account -->
             <div class="navbar-item has-dropdown is-active">
                 <a href="navbar-v1-profile-main.html" class="navbar-link">
-                    <img src="https://via.placeholder.com/150x150" data-demo-src="{% static 'assets/img/avatars/jenna.png' %}" alt="" />
-                    <span class="is-heading">Jenna Davis</span>
+                     {% if request.user.profile.image %}
+                                <img class="is-rounded" src="{{ request.user.profile.image.url }}" data-user-popover="{{ request.user.id }}" alt="" />
+                    {% else %} <img class="is-rounded" src="{{ request.user.profile.image.url }}" data-user-popover="{{ request.user.id }}" alt="" />
+                    {% endif %}
+                    {% if user.profile.first_name %}
+                            <span class="is-heading">{{ user.profile.first_name|title }} {{ user.profile.last_name|title }}</span>
+                    {% else %}
+                            <span class="is-heading">{{ user.username }}</span>
+                    {% endif %}
                 </a>
 
                 <!-- Mobile Dropdown -->
